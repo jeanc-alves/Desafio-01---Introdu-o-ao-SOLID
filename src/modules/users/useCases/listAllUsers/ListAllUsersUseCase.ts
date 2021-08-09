@@ -9,13 +9,12 @@ class ListAllUsersUseCase {
   constructor(private usersRepository: IUsersRepository) { }
 
   execute({ user_id }: IRequest): User[] {
-    const user = this.usersRepository.findById(user_id);
-    const { admin } = user;
-    if (admin !== true) {
-      throw new Error("user not admin");
+    const userLogged = this.usersRepository.findById(user_id);
+    const isAdmin = this.usersRepository.isAdmin(userLogged);
+    if (!isAdmin) {
+      throw new Error("Não é admin");
     }
-    const users = this.usersRepository.list();
-    return users;
+    return this.usersRepository.list();
   }
 }
 

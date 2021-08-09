@@ -20,10 +20,6 @@ class UsersRepository implements IUsersRepository {
 
   create({ name, email }: ICreateUserDTO): User {
     const user = new User();
-    const userExist = this.users.find((user) => user.email === email);
-    if (userExist) {
-      throw new Error("Email already exists");
-    }
 
     Object.assign(user, {
       name,
@@ -41,6 +37,10 @@ class UsersRepository implements IUsersRepository {
       throw new Error("Usuario não encontrado");
     }
     return userExist;
+  }
+
+  isAdmin(user: User): boolean {
+    return user.admin;
   }
 
   findByEmail(email: string): User | undefined {
